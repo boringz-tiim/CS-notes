@@ -5,6 +5,11 @@ git add .
 git commit -m "更新笔记"
 git push
 ```
+### 把远程仓库拉下来进行合并然后再推送
+```
+git pull origin main --rebase
+git push origin main
+```
 ## 一.仓库管理
 ### 1.初始化仓库
 
