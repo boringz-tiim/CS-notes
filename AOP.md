@@ -76,13 +76,60 @@ public void insert(DeptLog deptLog){
 ### 通知类型
     1. @Before: 在目标方法调用前执行
     2. @After: 在目标方法调用后执行
+   
     3. @AfterReturning: 在目标方法正常返回后执行,有异常不会执行
     4. @AfterThrowing: 在目标方法抛出异常后执行
-    5. @Around: 在目标方法调用前后执行，可以控制目标方法是否执行，返回值或异常是否继续抛出。** 需要自己调用ProceedingJoinPoint.proceed()方法来执行目标方法其他通知不需要考虑目标方法执行 **
-1. ```java
+    5. @Around: 在目标方法调用前后执行，可以控制目标方法是否执行，返回值或异常是否继续抛出。** 需要自己调用ProceedingJoinPoint.proceed()方法来执行目标方法其他通知不需要考虑目标方法执行 ,返回值要指定为Object类型**
+```java
   //抽取切入点表达式
     @Pointcut("execution(* com.example.tails.service.impl.DeptServicelmpl.*(..))")
+    //private 仅能在当前切面类中引用该表达式
+    //public 在其他外部的切面类中也能引用该表达式
     private void pt(){}
+    //引用切入点表达式
    @Before("pt()")
-   ```
+   @After("pt()")
+   @AfterReturning("pt()")
+   @AfterThrowing("pt()")
+   @Around("pt()")
+```
+
+### 执行顺序
+1.不同切面类种默认按照切面类的类名字母排序，目标方法前的通知方法，字母排名靠前的先执行，
+2.用@Order注解可以调整切面类的执行顺序，目标方法前的通知方法，值越小越先执行
+```java
+@Order(1)
+@Component
+@Aspect
+@Slf4j
+```
+### 切入点表达式
+1. execution表达式：匹配方法执行点，语法格式：
+   execution(修饰符? 返回类型 声明类型? 方法名(参数) 异常类型?)
+2. @annotation(com.itheima.anno.Log) 
+    用于匹配表示有特定注解的方法
+### 连接点
+在 Spring中使用JoinPoint抽象了连接点，用它可以获得方法执行时的相关信息，如目标类名，方法名，方法参数等。
+-- 对于@Around通知，获取连接点信息只能使用ProceedingJoinPoint，它是JoinPoint的子接口。
+-- 对于@Before、@After、@AfterReturning、@AfterThrowing通知，获取连接点信息只能使用JoinPoint。它是ProceedingJoinPoint的父类型
+```java
+    String className=joinPoint.getTarget().getClass().getName();
+       log.info("目标对象的类名:{}",className);
+       String methodName=joinPoint.getSignature().getName();
+       log.info("目标方法的方法名{}",methodName);
+        Object[] args=joinPoint.getArgs();
+        log.info("目标方法运行时传入的参数:{}", Arrays.toString(args));
+        //放行，目标方法执行
+        Object result=joinPoint.proceed();
+        log.info("目标方法运行的返回值:{}",result);
+```
+
+```java
+@Around("execution(* com.example.demo.service.*.*(..))")
+public Object around(ProceedingJoinPoint joinPoint) throws Throwable 
+@Before("execution(* com.example.demo.service.*.*(..))")
+public void before(JoinPoint joinPoint) 
+```
+
+
 ### 动态代理
