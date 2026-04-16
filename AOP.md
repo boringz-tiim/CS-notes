@@ -132,4 +132,6 @@ public void before(JoinPoint joinPoint)
 ```
 
 
-### 动态代理
+### 案例：将案例中增删改相关接口的操作日志记录到数据库表中，使用AOP实现。
+```java
+

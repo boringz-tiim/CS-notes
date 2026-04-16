@@ -173,3 +173,130 @@ node_modules/
 
 # Ignore all .txt files in the root directory
 *.txt
+# Git 查找历史版本完整指南
+
+## 一、核心结论
+
+通过 **commit（提交记录）** 可以找到任意历史版本代码。
+
+👉 不需要记住 commit ID，只需要通过记录查找即可。
+
+---
+
+## 二、查看提交记录（最常用）
+
+### 1. 查看完整提交记录
+
+```bash
+git log
+```
+
+示例：
+
+```bash
+commit a1b2c3...
+Author: xxx
+Date: xxx
+
+    完成JWT拦截器
+```
+
+---
+
+### 2. 简洁版（推荐🔥）
+
+```bash
+git log --oneline
+```
+
+示例：
+
+```bash
+a1b2c3 完成JWT拦截器
+d4e5f6 修复登录bug
+g7h8i9 初始项目
+```
+
+👉 优点：一眼找到需要的版本
+
+---
+
+## 三、在 GitHub 上查找
+
+进入仓库 → 点击 **Commits**
+
+可以：
+
+* 按时间查找
+* 按提交说明查找
+* 查看每次修改内容（diff）
+
+---
+
+## 四、按文件查找历史（很实用）
+
+### 查看某个文件的修改记录
+
+```bash
+git log 文件名
+```
+
+示例：
+
+```bash
+git log JwtTokenAdminInterceptor.java
+```
+
+👉 只显示该文件的修改历史
+
+---
+
+## 五、查看代码是谁修改的（进阶）
+
+```bash
+git blame 文件名
+```
+
+作用：
+
+* 查看每一行代码的修改人
+* 查看对应的 commit
+
+---
+
+## 六、找回误操作（救命命令🔥）
+
+```bash
+git reflog
+```
+
+作用：
+
+* 记录所有操作历史（包括回退、切换分支）
+* 可以找回丢失的 commit
+
+---
+
+## 七、良好习惯（非常重要）
+
+### ❌ 错误写法
+
+```bash
+git commit -m "修改"
+```
+
+### ✅ 正确写法
+
+```bash
+git commit -m "完成JWT拦截器token校验"
+```
+
+👉 提交信息越清晰，越容易找回代码
+
+---
+
+## 八、总结
+
+👉 Git 通过 commit 记录所有代码变更历史
+👉 可以通过 log / GitHub 页面查找任意版本
+👉 不需要记 commit ID，只需要看提交记录即可
